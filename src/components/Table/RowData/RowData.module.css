@@ -1,0 +1,13 @@
+.rowData_container {
+  display: grid;
+  grid-template-columns: 110px auto 200px 200px 200px 200px;
+  height: 60px;
+  color: var(--text-color-white);
+}
+.rowData_container div {
+  border-bottom: 1px solid var(--color-border);
+  padding: 0 12px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}

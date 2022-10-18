@@ -1,0 +1,21 @@
+.app_container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #27272a;
+  color: var(--text-color-white);
+}
+
+.content {
+  display: flex;
+}
+.app_sidebar,
+.app_main {
+  height: calc(100vh - 88px);
+}
+
+.app_sidebar {
+  min-width: 234px;
+}
+.app_main {
+  width: 100%;
+}

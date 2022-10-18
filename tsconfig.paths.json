@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
+    "baseUrl": "./src",
+    "paths": {
+      "@components": ["./components"],
+      "@components/*": ["./components/*"],
+      "@common/": ["./common/"],
+      "@common/*": ["./common/*"]
+    }
+  }
+}

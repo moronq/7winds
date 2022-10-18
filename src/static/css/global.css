@@ -1,0 +1,25 @@
+:root {
+  /* color */
+
+  --color-border: #414144;
+
+  /* images */
+
+  --images-arrow-back: url('../icons/arrow-back.svg');
+  --images-file: url('../icons/file.svg');
+  --images-folder-main: url('../icons/folder-main.svg');
+  --images-folder-sub: url('../icons/folder-sub.svg');
+  --images-list-marker: url('../icons/list-marker.svg');
+  --images-tiles: url('../icons/tiles.svg');
+  --images-arrow-down: url('../icons/arrow-down.svg');
+
+  /* text */
+
+  --text-color-white: white;
+  --text-color-gray: #a1a1aa;
+
+  /* background-color */
+
+  --background-hover-gray: #a1a1aa;
+  --background-main-dark: #202124;
+}

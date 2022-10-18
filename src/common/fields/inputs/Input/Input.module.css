@@ -1,0 +1,9 @@
+.input {
+  border: 1px solid var(--color-border);
+  height: 36px;
+  width: 100%;
+  padding: 10px;
+  caret-color: var(--color-border);
+  color: var(--text-color-white);
+  border-radius: 6px;
+}
