@@ -1,95 +1,77 @@
-import React from 'react';
+import React from 'react'
 
-import { Input } from '@common/fields';
+import { useAppSelector } from '@store/hooks/hook'
 
-import styles from './RowData.module.scss';
+import { LevelTypeRowData } from './LevelTypeRowData'
+import { RowTypeRowData } from './RowTypeRowData'
 
-interface RowDataProps extends NewRowData {}
+interface RowDataProps {}
 
 export const RowData: React.FC<RowDataProps> = () => {
-  const [isEditing, setIsEditing] = React.useState(false);
+  const { rows } = useAppSelector((state) => state.rows)
 
-  const startEditing = () => {
-    setIsEditing(true);
-  };
-  const stopEditing = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') setIsEditing(false);
-  };
-
-  console.log(isEditing);
+  const firstLevelArr = rows.filter((el) => el.parent === null)
+  const secondLevelArr = rows.filter((el) => el.parent && el.type === 'level')
+  const rowsArr = rows.filter((el) => el.type === 'row')
 
   return (
-    <form className={styles.rowData_container} onDoubleClick={startEditing}>
-      {/* <div className={styles.rowData_level_container} onDoubleClick={(e) => e.stopPropagation()}>
-        {!parent && (
-          <>
-            <button
-              aria-label='first-level'
-              onClick={(e) => e.preventDefault()}
-              className={styles.rowData_first_level_icon_container}
-            />
-            <span className={styles.rowData_first_level_line} />
-          </>
-        )}
-        {parent && type === 'level' && (
-          <>
-            <button
-              aria-label='second-level'
-              onClick={(e) => e.preventDefault()}
-              className={styles.rowData_second_level_icon_container}
-            />
-            {sub?.length && <span className={styles.rowData_second_level_line} />}
-            {last || <span className={styles.rowData_second_level_sub_line} />}
-          </>
-        )}
-        {parent && type === 'row' && (
-          <>
-            <button
-              aria-label='third-level'
-              onClick={(e) => e.preventDefault()}
-              className={styles.rowData_third_level_icon_container}
-            />
-            {!last && <span className={styles.rowData_third_level_line} />}
-            {subLine && <span className={styles.rowData_second_level_sub_line} />}
-          </>
-        )}
-      </div>
-      {isEditing ? (
-        <>
-          <div>
-            <Input type='text' onKeyDown={(e) => stopEditing(e)} />
-          </div>
-          <div>
-            <Input type='text' onKeyDown={(e) => stopEditing(e)} />
-          </div>
-          <div>
-            <Input type='text' onKeyDown={(e) => stopEditing(e)} />
-          </div>
-          <div>
-            <Input type='text' onKeyDown={(e) => stopEditing(e)} />
-          </div>
-        </>
-      ) : (
-        <>
-          {type === 'row' ? (
-            <>
-              <div>{title}</div>
-              <div>{unit}</div>
-              <div>{quantity}</div>
-              <div>{unitPrice}</div>
-            </>
-          ) : (
-            <>
-              <div />
-              <div />
-              <div />
-              <div />
-            </>
-          )}
-        </>
-      )}
-
-      <div>{price}</div> */}
-    </form>
-  );
-};
+    <>
+      {firstLevelArr.map((firstLevel) => (
+        <LevelTypeRowData
+          parent={firstLevel.parent}
+          title={firstLevel.title}
+          price={firstLevel.price}
+          key={firstLevel.id}
+        >
+          {secondLevelArr
+            .filter((second) => second.parent === firstLevel.id)
+            .map((secondLevel, index) => (
+              <LevelTypeRowData
+                parent={secondLevel.parent}
+                price={secondLevel.price}
+                title={secondLevel.title}
+                isLast={
+                  index + 1 ===
+                    secondLevelArr.filter((second) => second.parent === firstLevel.id).length &&
+                  rowsArr.filter((rowsFilter) => rowsFilter.parent === firstLevel.id).length === 0
+                }
+                key={secondLevel.id}
+              >
+                {rowsArr
+                  .filter((rowsFilter) => rowsFilter.parent === secondLevel.id)
+                  .map((rows) => (
+                    <RowTypeRowData
+                      parentHasParent={true}
+                      isParentLast={
+                        index + 1 ===
+                        secondLevelArr.filter((second) => second.parent === secondLevel.id).length
+                      }
+                      price={rows.price}
+                      quantity={rows.quantity}
+                      title={rows.title}
+                      unit={rows.unit}
+                      unitPrice={rows.unitPrice}
+                      key={rows.id}
+                    />
+                  ))}
+              </LevelTypeRowData>
+            ))}
+          {rowsArr
+            .filter((rowsFilter) => rowsFilter.parent === firstLevel.id)
+            .map((rows) => (
+              <RowTypeRowData
+                parentHasParent={false}
+                isParentLast={true}
+                price={rows.price}
+                quantity={rows.quantity}
+                title={rows.title}
+                unit={rows.unit}
+                unitPrice={rows.unitPrice}
+                key={rows.id}
+              />
+            ))}
+        </LevelTypeRowData>
+      ))}
+    </>
+  )
+}

@@ -25,8 +25,6 @@ export const LevelTypeRowData: React.FC<LevelTypeRowDataProps> = ({
     if (e.key === 'Enter') setIsEditing(false);
   };
 
-  console.log(isLast);
-
   return (
     <>
       <form className={styles.rowData_container} onDoubleClick={startEditing}>

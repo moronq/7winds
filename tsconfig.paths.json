@@ -6,7 +6,8 @@
       "@components": ["./components"],
       "@components/*": ["./components/*"],
       "@common/": ["./common/"],
-      "@common/*": ["./common/*"]
+      "@common/*": ["./common/*"],
+      "@store/*": ["./store/*"]
     }
   }
 }

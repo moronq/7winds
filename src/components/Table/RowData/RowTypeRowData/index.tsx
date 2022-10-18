@@ -1,12 +1,19 @@
-import React from 'react';
+import React from 'react'
 
-import { Input } from '@common/fields';
+import { Input } from '@common/fields'
 
-import styles from '../RowData.module.scss';
+import styles from '../RowData.module.scss'
 
 interface RowTypeRowDataProps extends Omit<RowData, 'id' | 'parent' | 'type'> {
-  parentHasParent: boolean;
-  isParentLast: boolean;
+  parentHasParent: boolean
+  isParentLast: boolean
+}
+
+interface RowTypeRowDataFields {
+  title: string
+  unit: string
+  quantity: number
+  unitPrice: number
 }
 
 export const RowTypeRowData: React.FC<RowTypeRowDataProps> = ({
@@ -18,14 +25,26 @@ export const RowTypeRowData: React.FC<RowTypeRowDataProps> = ({
   parentHasParent,
   isParentLast = true
 }) => {
-  const [isEditing, setIsEditing] = React.useState(false);
+  const [isEditing, setIsEditing] = React.useState(false)
+  const [values, setValues] = React.useState<RowTypeRowDataFields>({
+    title: '',
+    quantity: 0,
+    unit: '',
+    unitPrice: 0
+  })
+
+  console.log(values)
+
+  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
+    setValues({ ...values, [field]: e.target.value })
+  }
 
   const startEditing = () => {
-    setIsEditing(true);
-  };
+    setIsEditing(true)
+  }
   const stopEditing = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') setIsEditing(false);
-  };
+    if (e.key === 'Enter') setIsEditing(false)
+  }
 
   return (
     <form className={styles.rowData_container} onDoubleClick={startEditing}>
@@ -54,16 +73,24 @@ export const RowTypeRowData: React.FC<RowTypeRowDataProps> = ({
       {isEditing ? (
         <>
           <div>
-            <Input type='text' onKeyDown={(e) => stopEditing(e)} />
+            <Input type='text' value={values.title} onChange={(e) => onChangeHandler(e, 'title')} />
           </div>
           <div>
-            <Input type='text' onKeyDown={(e) => stopEditing(e)} />
+            <Input type='text' value={values.unit} onChange={(e) => onChangeHandler(e, 'unit')} />
           </div>
           <div>
-            <Input type='text' onKeyDown={(e) => stopEditing(e)} />
+            <Input
+              type='text'
+              value={values.quantity}
+              onChange={(e) => onChangeHandler(e, 'quantity')}
+            />
           </div>
           <div>
-            <Input type='text' onKeyDown={(e) => stopEditing(e)} />
+            <Input
+              type='text'
+              value={values.unitPrice}
+              onChange={(e) => onChangeHandler(e, 'unitPrice')}
+            />
           </div>
         </>
       ) : (
@@ -74,8 +101,7 @@ export const RowTypeRowData: React.FC<RowTypeRowDataProps> = ({
           <div>{unitPrice}</div>
         </>
       )}
-
       <div>{price}</div>
     </form>
-  );
-};
+  )
+}

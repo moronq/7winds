@@ -4,6 +4,7 @@
   height: 60px;
   color: var(--text-color-white);
 }
+
 .rowData_container div {
   border-bottom: 1px solid var(--color-border);
   padding: 0 12px;
@@ -11,9 +12,11 @@
   display: flex;
   align-items: center;
 }
+
 .rowData_level_container {
   position: relative;
 }
+
 .rowData_first_level_icon_container,
 .rowData_second_level_icon_container,
 .rowData_third_level_icon_container {
@@ -39,37 +42,46 @@
   width: 1px;
   bottom: 28.5px;
 }
+
 .rowData_first_level_line {
   bottom: -1px;
   height: 25px;
   left: 23px;
 }
+
 .rowData_second_level_line {
   height: 31px;
   left: 23px;
 }
+
 .rowData_second_level_sub_line {
   bottom: 0;
   height: 60px;
   left: 23px;
 }
+
 .rowData_third_level_line {
   height: 55px;
   left: 43px;
 }
+
 .rowData_third_level_main_line {
   height: 60px;
   left: 23px;
 }
+
 .rowData_second_level_icon_container {
   background-image: var(--images-folder-sub);
   left: 32px;
 }
+
 .rowData_third_level_icon_container {
   background-image: var(--images-file);
   left: 52px;
 }
-.rowData_third_level_line_handle {
+
+.rowData_third_level_line_handle,
+.rowData_third_level_line_main_handle {
   content: '';
   position: absolute;
   width: 13px;
@@ -80,13 +92,8 @@
 }
 
 .rowData_third_level_line_main_handle {
-  content: '';
-  position: absolute;
   width: 33px;
-  height: 1px;
-  background-color: var(--background-lines);
   left: 23px;
-  bottom: 28px;
 }
 
 .rowData_second_level_icon_container:before {
