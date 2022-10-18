@@ -2,33 +2,11 @@ import React from 'react';
 
 import { Input } from '@common/fields';
 
-import styles from './RowData.module.css';
+import styles from './RowData.module.scss';
 
-interface NewRowData {
-  title: string; // Наименование работ
-  unit: string; // Ед. изм.
-  quantity: number; // Количество
-  unitPrice: number; // Цена за ед.
-  price: number; // Стоимость
+interface RowDataProps extends NewRowData {}
 
-  parent: number | null; // id уровня, в котором находится (либо null для первого уровня)
-  type: 'level' | 'row';
-}
-
-interface RowDataProps extends NewRowData {
-  id: number;
-}
-
-export const RowData: React.FC<RowDataProps> = ({
-  title,
-  unit,
-  quantity,
-  price = 0,
-  unitPrice,
-  parent,
-  type,
-  id
-}) => {
+export const RowData: React.FC<RowDataProps> = () => {
   const [isEditing, setIsEditing] = React.useState(false);
 
   const startEditing = () => {
@@ -41,10 +19,43 @@ export const RowData: React.FC<RowDataProps> = ({
   console.log(isEditing);
 
   return (
-    <>
+    <form className={styles.rowData_container} onDoubleClick={startEditing}>
+      {/* <div className={styles.rowData_level_container} onDoubleClick={(e) => e.stopPropagation()}>
+        {!parent && (
+          <>
+            <button
+              aria-label='first-level'
+              onClick={(e) => e.preventDefault()}
+              className={styles.rowData_first_level_icon_container}
+            />
+            <span className={styles.rowData_first_level_line} />
+          </>
+        )}
+        {parent && type === 'level' && (
+          <>
+            <button
+              aria-label='second-level'
+              onClick={(e) => e.preventDefault()}
+              className={styles.rowData_second_level_icon_container}
+            />
+            {sub?.length && <span className={styles.rowData_second_level_line} />}
+            {last || <span className={styles.rowData_second_level_sub_line} />}
+          </>
+        )}
+        {parent && type === 'row' && (
+          <>
+            <button
+              aria-label='third-level'
+              onClick={(e) => e.preventDefault()}
+              className={styles.rowData_third_level_icon_container}
+            />
+            {!last && <span className={styles.rowData_third_level_line} />}
+            {subLine && <span className={styles.rowData_second_level_sub_line} />}
+          </>
+        )}
+      </div>
       {isEditing ? (
-        <form className={styles.rowData_container}>
-          <div>Уровень</div>
+        <>
           <div>
             <Input type='text' onKeyDown={(e) => stopEditing(e)} />
           </div>
@@ -57,18 +68,28 @@ export const RowData: React.FC<RowDataProps> = ({
           <div>
             <Input type='text' onKeyDown={(e) => stopEditing(e)} />
           </div>
-          <div>{price}</div>
-        </form>
+        </>
       ) : (
-        <div aria-hidden className={styles.rowData_container} onDoubleClick={startEditing}>
-          <div>Уровень</div>
-          <div>{title}</div>
-          <div>{unit}</div>
-          <div>{quantity}</div>
-          <div>{unitPrice}</div>
-          <div>{price}</div>
-        </div>
+        <>
+          {type === 'row' ? (
+            <>
+              <div>{title}</div>
+              <div>{unit}</div>
+              <div>{quantity}</div>
+              <div>{unitPrice}</div>
+            </>
+          ) : (
+            <>
+              <div />
+              <div />
+              <div />
+              <div />
+            </>
+          )}
+        </>
       )}
-    </>
+
+      <div>{price}</div> */}
+    </form>
   );
 };
