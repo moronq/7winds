@@ -1,10 +1,10 @@
-import React from 'react';
+import React from 'react'
 
-import avatar from '../../static/images/avatar.jpg';
+import avatar from '../../static/images/avatar.jpg'
 
-import styles from './Header.module.css';
+import styles from './Header.module.css'
 
-export const Header = () => (
+export const Header: React.FC = () => (
   <header className={styles.header_container}>
     <div className={styles.navbar_container}>
       <nav className={styles.navbar}>
@@ -36,4 +36,4 @@ export const Header = () => (
       <div className={styles.title_container}>Строительно-монтажные работы</div>
     </div>
   </header>
-);
+)

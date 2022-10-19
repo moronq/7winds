@@ -1,7 +1,8 @@
 import React from 'react'
 
 import { useAppDispatch } from '@store/hooks/hook'
-import { changeRow, createRow } from '@store/slices/rowSlice/rowSlice'
+import { createRow } from '@store/slices/rowSlice/rowSlice'
+import { createDefaultRowData } from '@utils/hooks/rows/createDefaultRowData'
 
 import styles from './CreateLevel.module.scss'
 
@@ -25,46 +26,24 @@ export const CreateLevel: React.FC<CreateLevelProps> = ({
   parentId
 }) => {
   const dispatch = useAppDispatch()
-  const addRowFirstLevel = () => {
-    dispatch(
-      createRow({
-        parent: null,
-        price: 0,
-        quantity: 0,
-        title: '',
-        type: 'level',
-        unit: '',
-        unitPrice: 0
-      })
-    )
+
+  const onClickActionCreator = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    parent: NewRowData['parent'],
+    type: NewRowData['type']
+  ) => {
+    e.preventDefault()
+    dispatch(createRow(createDefaultRowData(parent, type)))
   }
 
-  const addRowSecondLevel = () => {
-    dispatch(
-      createRow({
-        parent: parentId || id,
-        price: 0,
-        quantity: 0,
-        title: '',
-        type: 'level',
-        unit: '',
-        unitPrice: 0
-      })
-    )
-  }
-  const addRowTypeRow = () => {
-    dispatch(
-      createRow({
-        parent: id,
-        price: 0,
-        quantity: 0,
-        title: '',
-        type: 'row',
-        unit: '',
-        unitPrice: 0
-      })
-    )
-  }
+  const addRowFirstLevel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+    onClickActionCreator(e, null, 'level')
+
+  const addRowSecondLevel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+    onClickActionCreator(e, parentId || id, 'level')
+
+  const addRowTypeRow = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+    onClickActionCreator(e, id, 'row')
 
   return (
     <>
@@ -73,26 +52,27 @@ export const CreateLevel: React.FC<CreateLevelProps> = ({
           <button
             aria-label='second-level'
             onClick={(e) => e.preventDefault()}
-            className={styles.rowData_second_level_icon_container}
+            className={styles.second_level_icon_container}
           />
-          {parent && <span className={styles.rowData_second_level_line} />}
-          {!isLast && <span className={styles.rowData_second_level_sub_line} />}
-          <div className={styles.rowData_additional_second_container}>
+          {parent && <span className={styles.second_level_line} />}
+          {!isLast && <span className={styles.second_level_sub_line} />}
+          <div
+            className={styles.additional_second_container}
+            onDoubleClick={(e) => e.stopPropagation()}
+          >
             <button
               aria-label='second-level'
               onClick={(e) => {
-                e.preventDefault()
-                addRowSecondLevel()
+                addRowSecondLevel(e)
               }}
-              className={styles.rowData_second_level_additional}
+              className={styles.second_level_additional}
             />
             <button
               aria-label='third-level'
               onClick={(e) => {
-                e.preventDefault()
-                addRowTypeRow()
+                addRowTypeRow(e)
               }}
-              className={styles.rowData_third_level_additional}
+              className={styles.third_level_additional}
             />
           </div>
         </>
@@ -104,34 +84,31 @@ export const CreateLevel: React.FC<CreateLevelProps> = ({
             onClick={(e) => {
               e.preventDefault()
             }}
-            className={styles.rowData_first_level_icon_container}
+            className={styles.first_level_icon_container}
           />
-          {!isLast && <span className={styles.rowData_first_level_line} />}
+          {!isLast && <span className={styles.first_level_line} />}
           {!disabled && (
-            <div className={styles.rowData_additional_container}>
+            <div className={styles.additional_container} onDoubleClick={(e) => e.stopPropagation()}>
               <button
                 aria-label='first-level'
                 onClick={(e) => {
-                  e.preventDefault()
-                  addRowFirstLevel()
+                  addRowFirstLevel(e)
                 }}
-                className={styles.rowData_first_level_additional}
+                className={styles.first_level_additional}
               />
               <button
                 aria-label='second-level'
                 onClick={(e) => {
-                  e.preventDefault()
-                  addRowSecondLevel()
+                  addRowSecondLevel(e)
                 }}
-                className={styles.rowData_second_level_additional}
+                className={styles.second_level_additional}
               />
               <button
                 aria-label='third-level'
                 onClick={(e) => {
-                  e.preventDefault()
-                  addRowTypeRow()
+                  addRowTypeRow(e)
                 }}
-                className={styles.rowData_third_level_additional}
+                className={styles.third_level_additional}
               />
             </div>
           )}
@@ -142,28 +119,21 @@ export const CreateLevel: React.FC<CreateLevelProps> = ({
           <button
             aria-label='third-level'
             onClick={(e) => {
-              e.preventDefault()
-              addRowTypeRow()
+              addRowTypeRow(e)
             }}
-            className={styles.rowData_third_level_icon_container}
+            className={styles.third_level_icon_container}
           />
           <span
             className={`${
-              parentHasParent
-                ? styles.rowData_third_level_line
-                : styles.rowData_third_level_main_line
+              parentHasParent ? styles.third_level_line : styles.third_level_main_line
             }`}
           />
           <span
             className={`${
-              parentHasParent
-                ? styles.rowData_third_level_line_handle
-                : styles.rowData_third_level_line_main_handle
+              parentHasParent ? styles.third_level_line_handle : styles.third_level_line_main_handle
             }`}
           />
-          {parentHasParent && !isParentLast && (
-            <span className={styles.rowData_second_level_sub_line} />
-          )}
+          {parentHasParent && !isParentLast && <span className={styles.second_level_sub_line} />}
         </>
       )}
     </>

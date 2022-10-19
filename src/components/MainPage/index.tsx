@@ -1,10 +1,10 @@
-import React from 'react';
+import React from 'react'
 
-import { Header, SideBar, Table } from '@components';
+import { Header, SideBar, Table } from '@components'
 
-import styles from './MainPage.module.css';
+import styles from './MainPage.module.css'
 
-export const MainPage = () => (
+export const MainPage: React.FC = () => (
   <div className={styles.app_container}>
     <Header />
     <div className={styles.content}>
@@ -16,4 +16,4 @@ export const MainPage = () => (
       </div>
     </div>
   </div>
-);
+)

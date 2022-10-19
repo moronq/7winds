@@ -15,7 +15,8 @@
   cursor: pointer;
 }
 
-.sidebar_item_container:hover {
+.sidebar_item_container:hover,
+.active {
   background-color: var(--background-hover-gray);
 }
 

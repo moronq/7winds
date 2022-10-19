@@ -5,9 +5,10 @@
     "paths": {
       "@components": ["./components"],
       "@components/*": ["./components/*"],
-      "@common/": ["./common/"],
+      "@common/": ["./common"],
       "@common/*": ["./common/*"],
       "@store/*": ["./store/*"],
+      "@utils/": ["./utils"],
       "@utils/*": ["./utils/*"]
     }
   }

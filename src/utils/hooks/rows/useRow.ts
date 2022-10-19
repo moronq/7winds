@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { useAppDispatch } from '@store/hooks/hook'
+
 import { useOnClickOutside } from '../useOnClickOutside'
 
 export const useRow = <T extends Object>(value: T) => {
@@ -11,14 +13,16 @@ export const useRow = <T extends Object>(value: T) => {
 
   useOnClickOutside(refForm, () => setIsEditing(false))
 
+  const dispatch = useAppDispatch()
+
   React.useEffect(() => {
     if (ref.current) {
       ref.current.focus()
     }
-  }, [])
+  }, [isEditing])
 
-  const onChangeHandler = <K extends keyof T>(e: React.ChangeEvent<HTMLInputElement>, field: K) => {
-    setValues({ ...values, [field]: e.target.value })
+  const onChangeHandler = <K extends keyof T>(value: string, field: K) => {
+    setValues({ ...values, [field]: value })
   }
 
   const startEditing = () => {
@@ -28,5 +32,5 @@ export const useRow = <T extends Object>(value: T) => {
     if (e.key === 'Enter') setIsEditing(false)
   }
 
-  return { ref, refForm, isEditing, values, startEditing, stopEditing, onChangeHandler }
+  return { ref, refForm, isEditing, values, dispatch, startEditing, stopEditing, onChangeHandler }
 }

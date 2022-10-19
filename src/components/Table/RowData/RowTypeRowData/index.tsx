@@ -1,14 +1,13 @@
 import React from 'react'
 
 import { Input } from '@common/fields'
-import { useAppDispatch } from '@store/hooks/hook'
 import { changeRow } from '@store/slices/rowSlice/rowSlice'
+import { numberCheck } from '@utils/form'
 import { useRow } from '@utils/hooks'
 
 import { CreateLevel } from '../CreateLevel/CreateLevel'
 
 import styles from '../RowData.module.scss'
-import { dotCheck } from '@utils/form'
 
 interface RowTypeRowDataProps extends Omit<RowData, 'parent' | 'type'> {
   parentHasParent: boolean
@@ -36,8 +35,7 @@ export const RowTypeRowData: React.FC<RowTypeRowDataProps> = ({
   id,
   isParentLast = true
 }) => {
-  const dispatch = useAppDispatch()
-  const { ref, refForm, isEditing, values, startEditing, onChangeHandler, stopEditing } =
+  const { ref, refForm, isEditing, values, dispatch, startEditing, onChangeHandler, stopEditing } =
     useRow<RowTypeRowDataFields>({
       title,
       quantity,
@@ -45,7 +43,7 @@ export const RowTypeRowData: React.FC<RowTypeRowDataProps> = ({
       unitPrice
     })
 
-  const onChangeRow = (type: 'level' | 'row') => {
+  const onChangeRow = (type: Type) => {
     dispatch(
       changeRow({
         title: values.title,
@@ -60,9 +58,16 @@ export const RowTypeRowData: React.FC<RowTypeRowDataProps> = ({
     )
   }
 
+  const onKeyDownHandler = (e: React.KeyboardEvent<HTMLInputElement>, type: Type) => {
+    if (e.key === 'Enter') {
+      onChangeRow(type)
+      stopEditing(e)
+    }
+  }
+
   return (
-    <form ref={refForm} className={styles.rowData_container} onDoubleClick={startEditing}>
-      <div className={styles.rowData_level_container} onDoubleClick={(e) => e.stopPropagation()}>
+    <form ref={refForm} className={styles.container} onDoubleClick={startEditing}>
+      <div className={styles.level_container} onDoubleClick={(e) => e.stopPropagation()}>
         <CreateLevel
           parentId={parentId}
           id={id}
@@ -79,13 +84,8 @@ export const RowTypeRowData: React.FC<RowTypeRowDataProps> = ({
               inputRef={ref}
               type='text'
               value={values.title}
-              onChange={(e) => onChangeHandler(e, 'title')}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  onChangeRow('row')
-                  stopEditing(e)
-                }
-              }}
+              onChange={(e) => onChangeHandler(e.target.value, 'title')}
+              onKeyDown={(e) => onKeyDownHandler(e, 'row')}
               placeholder='Введите название работы'
             />
           </div>
@@ -93,13 +93,8 @@ export const RowTypeRowData: React.FC<RowTypeRowDataProps> = ({
             <Input
               type='text'
               value={values.unit}
-              onChange={(e) => onChangeHandler(e, 'unit')}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  onChangeRow('row')
-                  stopEditing(e)
-                }
-              }}
+              onChange={(e) => onChangeHandler(e.target.value, 'unit')}
+              onKeyDown={(e) => onKeyDownHandler(e, 'row')}
               placeholder='Л'
             />
           </div>
@@ -108,20 +103,12 @@ export const RowTypeRowData: React.FC<RowTypeRowDataProps> = ({
               type='text'
               value={values.quantity}
               onChange={(e) => {
-                if (
-                  (/[0-9.]/g.test(e.target.value[e.target.value.length - 1]) ||
-                    e.target.value === '') &&
-                  dotCheck(e.target.value)
-                ) {
-                  onChangeHandler(e, 'quantity')
+                const { value } = e.target
+                if (numberCheck(value)) {
+                  onChangeHandler(value, 'quantity')
                 }
               }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  onChangeRow('row')
-                  stopEditing(e)
-                }
-              }}
+              onKeyDown={(e) => onKeyDownHandler(e, 'row')}
               placeholder='1200'
             />
           </div>
@@ -130,20 +117,12 @@ export const RowTypeRowData: React.FC<RowTypeRowDataProps> = ({
               type='text'
               value={values.unitPrice}
               onChange={(e) => {
-                if (
-                  (/[0-9.]/g.test(e.target.value[e.target.value.length - 1]) ||
-                    e.target.value === '') &&
-                  dotCheck(e.target.value)
-                ) {
-                  onChangeHandler(e, 'unitPrice')
+                const { value } = e.target
+                if (numberCheck(value)) {
+                  onChangeHandler(value, 'unitPrice')
                 }
               }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  onChangeRow('row')
-                  stopEditing(e)
-                }
-              }}
+              onKeyDown={(e) => onKeyDownHandler(e, 'row')}
               placeholder='850'
             />
           </div>

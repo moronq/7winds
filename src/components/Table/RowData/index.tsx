@@ -5,14 +5,20 @@ import { useAppSelector } from '@store/hooks/hook'
 import { LevelTypeRowData } from './LevelTypeRowData'
 import { RowTypeRowData } from './RowTypeRowData'
 
-interface RowDataProps {}
-
-export const RowData: React.FC<RowDataProps> = () => {
+export const RowData: React.FC = () => {
   const { rows } = useAppSelector((state) => state.rows)
 
-  const firstLevelArr = rows.filter((el) => el.parent === null).sort((a, b) => a.id - b.id)
-  const secondLevelArr = rows.filter((el) => el.parent && el.type === 'level')
-  const rowsArr = rows.filter((el) => el.type === 'row')
+  const firstLevelArr = React.useMemo(
+    () => rows.filter((el) => el.parent === null).sort((a, b) => a.id - b.id),
+    [rows]
+  )
+
+  const secondLevelArr = React.useMemo(
+    () => rows.filter((el) => el.parent && el.type === 'level'),
+    [rows]
+  )
+
+  const rowsArr = React.useMemo(() => rows.filter((el) => el.type === 'row'), [rows])
 
   return (
     <>

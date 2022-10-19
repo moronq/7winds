@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { Input } from '@common/fields'
-import { useAppDispatch } from '@store/hooks/hook'
 import { changeRow } from '@store/slices/rowSlice/rowSlice'
 import { useRow } from '@utils/hooks'
 
@@ -24,13 +23,12 @@ export const LevelTypeRowData: React.FC<LevelTypeRowDataProps> = ({
   id,
   parentId
 }) => {
-  const { ref, refForm, isEditing, values, startEditing, onChangeHandler, stopEditing } = useRow<{
-    title: string
-  }>({
-    title: ''
-  })
-
-  const dispatch = useAppDispatch()
+  const { ref, refForm, isEditing, values, dispatch, startEditing, onChangeHandler, stopEditing } =
+    useRow<{
+      title: string
+    }>({
+      title: ''
+    })
 
   const onChangeRow = (type: 'level' | 'row') => {
     dispatch(
@@ -47,10 +45,17 @@ export const LevelTypeRowData: React.FC<LevelTypeRowDataProps> = ({
     )
   }
 
+  const onKeyDownHandler = (e: React.KeyboardEvent<HTMLInputElement>, type: Type) => {
+    if (e.key === 'Enter') {
+      onChangeRow(type)
+      stopEditing(e)
+    }
+  }
+
   return (
     <>
-      <form ref={refForm} className={styles.rowData_container} onDoubleClick={startEditing}>
-        <div className={styles.rowData_level_container} onDoubleClick={(e) => e.stopPropagation()}>
+      <form ref={refForm} className={styles.container} onDoubleClick={startEditing}>
+        <div className={styles.level_container}>
           <CreateLevel
             type='level'
             parent={!!parent}
@@ -66,11 +71,10 @@ export const LevelTypeRowData: React.FC<LevelTypeRowDataProps> = ({
               <Input
                 inputRef={ref}
                 value={values.title}
-                onChange={(e) => onChangeHandler(e, 'title')}
+                onChange={(e) => onChangeHandler(e.target.value, 'title')}
                 type='text'
                 onKeyDown={(e) => {
-                  onChangeRow('level')
-                  stopEditing(e)
+                  onKeyDownHandler(e, 'level')
                 }}
               />
             </div>

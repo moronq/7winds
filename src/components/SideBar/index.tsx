@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'react'
 
-import styles from './SideBar.module.css';
+import styles from './SideBar.module.css'
 
 const projects = [
   'По проекту',
@@ -18,13 +18,16 @@ const projects = [
   'Камеры',
   'Поручения',
   'Контрагенты'
-];
+]
 
-export const SideBar = () => (
+export const SideBar: React.FC = () => (
   <aside className={styles.sidebar_container}>
-    <ul className={styles.sidebar_list_container}>
+    <ul>
       {projects.map((el) => (
-        <li key={el} className={styles.sidebar_item_container}>
+        <li
+          key={el}
+          className={`${styles.sidebar_item_container} ${el === 'СМР' ? styles.active : ''}`}
+        >
           <div className={styles.sidebar_item_icon_container} />
           <span title={el} className={styles.sidebar_item_text}>
             {el}
@@ -33,4 +36,4 @@ export const SideBar = () => (
       ))}
     </ul>
   </aside>
-);
+)
