@@ -1,13 +1,13 @@
 import React from 'react'
 
 import { Input } from '@common/fields'
-import { useOnClickOutside } from '@utils/hooks'
+import { useAppDispatch } from '@store/hooks/hook'
+import { changeRow } from '@store/slices/rowSlice/rowSlice'
+import { useRow } from '@utils/hooks'
 
 import { CreateLevel } from '../CreateLevel/CreateLevel'
 
 import styles from '../RowData.module.scss'
-import { useAppDispatch } from '@store/hooks/hook'
-import { changeRow } from '@store/slices/rowSlice/rowSlice'
 
 interface LevelTypeRowDataProps extends Pick<RowData, 'title' | 'parent' | 'price' | 'id'> {
   children?: React.ReactNode
@@ -24,28 +24,11 @@ export const LevelTypeRowData: React.FC<LevelTypeRowDataProps> = ({
   id,
   parentId
 }) => {
-  const [isEditing, setIsEditing] = React.useState(true)
-  const ref = React.useRef<HTMLInputElement>(null)
-  const refForm = React.useRef<HTMLFormElement>(null)
-
-  React.useEffect(() => {
-    if (ref.current) {
-      ref.current.focus()
-    }
-  }, [])
-
-  useOnClickOutside(refForm, () => setIsEditing(false))
-
-  const [values, setValues] = React.useState<{ title: string }>({
+  const { ref, refForm, isEditing, values, startEditing, onChangeHandler, stopEditing } = useRow<{
+    title: string
+  }>({
     title: ''
   })
-
-  const startEditing = () => {
-    setIsEditing(true)
-  }
-  const stopEditing = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') setIsEditing(false)
-  }
 
   const dispatch = useAppDispatch()
 
@@ -62,10 +45,6 @@ export const LevelTypeRowData: React.FC<LevelTypeRowDataProps> = ({
         unitPrice: 0
       })
     )
-  }
-
-  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
-    setValues({ ...values, [field]: e.target.value })
   }
 
   return (

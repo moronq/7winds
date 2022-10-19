@@ -49,6 +49,7 @@ export const RowData: React.FC<RowDataProps> = () => {
                   .filter((rowsFilter) => rowsFilter.parent === secondLevel.id)
                   .map((rows) => (
                     <RowTypeRowData
+                      parent={secondLevel.id}
                       parentId={secondLevel.id}
                       id={rows.id}
                       parentHasParent={true}
@@ -73,6 +74,7 @@ export const RowData: React.FC<RowDataProps> = () => {
             .filter((rowsFilter) => rowsFilter.parent === firstLevel.id)
             .map((rows) => (
               <RowTypeRowData
+                parent={firstLevel.id}
                 parentId={null}
                 id={rows.id}
                 parentHasParent={false}
