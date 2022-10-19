@@ -84,7 +84,9 @@ export const LevelTypeRowData: React.FC<LevelTypeRowDataProps> = ({
           </>
         ) : (
           <>
-            <div>{title}</div>
+            <div>
+              <span title={title}>{title}</span>
+            </div>
             <div />
             <div />
             <div />

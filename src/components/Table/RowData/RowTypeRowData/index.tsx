@@ -129,7 +129,9 @@ export const RowTypeRowData: React.FC<RowTypeRowDataProps> = ({
         </>
       ) : (
         <>
-          <div>{title}</div>
+          <div>
+            <span title={title}>{title}</span>
+          </div>
           <div>{unit}</div>
           <div>{quantity}</div>
           <div>{unitPrice}</div>
