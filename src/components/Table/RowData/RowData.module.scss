@@ -16,3 +16,8 @@
 .rowData_level_container {
   position: relative;
 }
+.rowData_level_container div {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -10,7 +10,7 @@ interface RowDataProps {}
 export const RowData: React.FC<RowDataProps> = () => {
   const { rows } = useAppSelector((state) => state.rows)
 
-  const firstLevelArr = rows.filter((el) => el.parent === null)
+  const firstLevelArr = rows.filter((el) => el.parent === null).sort((a, b) => a.id - b.id)
   const secondLevelArr = rows.filter((el) => el.parent && el.type === 'level')
   const rowsArr = rows.filter((el) => el.type === 'row')
 

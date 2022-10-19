@@ -17,7 +17,7 @@ export const useRow = <T extends Object>(value: T) => {
     }
   }, [])
 
-  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
+  const onChangeHandler = <K extends keyof T>(e: React.ChangeEvent<HTMLInputElement>, field: K) => {
     setValues({ ...values, [field]: e.target.value })
   }
 

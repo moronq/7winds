@@ -31,7 +31,6 @@ const rowSlice = createSlice({
     changeRow: (state, action: PayloadAction<RowData>) => {
       const { changed } = editRow(action.payload, state.rows)
       state.rows = saveChanges(changed, state.rows)
-      console.log(state.rows)
     }
   }
 })

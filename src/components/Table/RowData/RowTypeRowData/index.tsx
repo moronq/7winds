@@ -8,6 +8,7 @@ import { useRow } from '@utils/hooks'
 import { CreateLevel } from '../CreateLevel/CreateLevel'
 
 import styles from '../RowData.module.scss'
+import { dotCheck } from '@utils/form'
 
 interface RowTypeRowDataProps extends Omit<RowData, 'parent' | 'type'> {
   parentHasParent: boolean
@@ -50,11 +51,11 @@ export const RowTypeRowData: React.FC<RowTypeRowDataProps> = ({
         title: values.title,
         id,
         parent,
-        price: values.quantity * values.unitPrice,
-        quantity: values.quantity,
+        price: parseFloat((values.quantity * values.unitPrice).toFixed(2)),
+        quantity: parseFloat((values.quantity * 1).toFixed(2)),
         type,
         unit: values.unit,
-        unitPrice: values.unitPrice
+        unitPrice: parseFloat((values.unitPrice * 1).toFixed(2))
       })
     )
   }
@@ -106,7 +107,15 @@ export const RowTypeRowData: React.FC<RowTypeRowDataProps> = ({
             <Input
               type='text'
               value={values.quantity}
-              onChange={(e) => onChangeHandler(e, 'quantity')}
+              onChange={(e) => {
+                if (
+                  (/[0-9.]/g.test(e.target.value[e.target.value.length - 1]) ||
+                    e.target.value === '') &&
+                  dotCheck(e.target.value)
+                ) {
+                  onChangeHandler(e, 'quantity')
+                }
+              }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   onChangeRow('row')
@@ -120,7 +129,15 @@ export const RowTypeRowData: React.FC<RowTypeRowDataProps> = ({
             <Input
               type='text'
               value={values.unitPrice}
-              onChange={(e) => onChangeHandler(e, 'unitPrice')}
+              onChange={(e) => {
+                if (
+                  (/[0-9.]/g.test(e.target.value[e.target.value.length - 1]) ||
+                    e.target.value === '') &&
+                  dotCheck(e.target.value)
+                ) {
+                  onChangeHandler(e, 'unitPrice')
+                }
+              }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   onChangeRow('row')
