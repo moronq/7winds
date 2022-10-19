@@ -18,15 +18,23 @@ export const RowData: React.FC<RowDataProps> = () => {
     <>
       {firstLevelArr.map((firstLevel) => (
         <LevelTypeRowData
+          parentId={null}
+          id={firstLevel.id}
           parent={firstLevel.parent}
           title={firstLevel.title}
           price={firstLevel.price}
           key={firstLevel.id}
+          isLast={
+            !secondLevelArr.filter((el) => el.parent === firstLevel.id).length &&
+            !rowsArr.filter((el) => el.parent === firstLevel.id).length
+          }
         >
           {secondLevelArr
             .filter((second) => second.parent === firstLevel.id)
             .map((secondLevel, index) => (
               <LevelTypeRowData
+                parentId={firstLevel.id}
+                id={secondLevel.id}
                 parent={secondLevel.parent}
                 price={secondLevel.price}
                 title={secondLevel.title}
@@ -41,10 +49,15 @@ export const RowData: React.FC<RowDataProps> = () => {
                   .filter((rowsFilter) => rowsFilter.parent === secondLevel.id)
                   .map((rows) => (
                     <RowTypeRowData
+                      parentId={secondLevel.id}
+                      id={rows.id}
                       parentHasParent={true}
                       isParentLast={
                         index + 1 ===
-                        secondLevelArr.filter((second) => second.parent === secondLevel.id).length
+                          secondLevelArr.filter((second) => second.parent === firstLevel.id)
+                            .length &&
+                        rowsArr.filter((rowsFilter) => rowsFilter.parent === firstLevel.id)
+                          .length === 0
                       }
                       price={rows.price}
                       quantity={rows.quantity}
@@ -60,6 +73,8 @@ export const RowData: React.FC<RowDataProps> = () => {
             .filter((rowsFilter) => rowsFilter.parent === firstLevel.id)
             .map((rows) => (
               <RowTypeRowData
+                parentId={null}
+                id={rows.id}
                 parentHasParent={false}
                 isParentLast={true}
                 price={rows.price}

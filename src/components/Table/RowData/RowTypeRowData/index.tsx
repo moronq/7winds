@@ -2,11 +2,15 @@ import React from 'react'
 
 import { Input } from '@common/fields'
 
-import styles from '../RowData.module.scss'
+import { CreateLevel } from '../CreateLevel/CreateLevel'
 
-interface RowTypeRowDataProps extends Omit<RowData, 'id' | 'parent' | 'type'> {
+import styles from '../RowData.module.scss'
+import { useOnClickOutside } from '@utils/hooks'
+
+interface RowTypeRowDataProps extends Omit<RowData, 'parent' | 'type'> {
   parentHasParent: boolean
   isParentLast: boolean
+  parentId: number | null
 }
 
 interface RowTypeRowDataFields {
@@ -18,14 +22,19 @@ interface RowTypeRowDataFields {
 
 export const RowTypeRowData: React.FC<RowTypeRowDataProps> = ({
   title,
+  parentId,
   price,
   quantity,
   unit,
   unitPrice,
   parentHasParent,
+  id,
   isParentLast = true
 }) => {
-  const [isEditing, setIsEditing] = React.useState(false)
+  const [isEditing, setIsEditing] = React.useState(true)
+  const refForm = React.useRef<HTMLFormElement>(null)
+  const ref = React.useRef<HTMLInputElement>(null)
+
   const [values, setValues] = React.useState<RowTypeRowDataFields>({
     title: '',
     quantity: 0,
@@ -33,7 +42,13 @@ export const RowTypeRowData: React.FC<RowTypeRowDataProps> = ({
     unitPrice: 0
   })
 
-  console.log(values)
+  useOnClickOutside(refForm, () => setIsEditing(false))
+
+  React.useEffect(() => {
+    if (ref.current) {
+      ref.current.focus()
+    }
+  }, [])
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
     setValues({ ...values, [field]: e.target.value })
@@ -47,42 +62,42 @@ export const RowTypeRowData: React.FC<RowTypeRowDataProps> = ({
   }
 
   return (
-    <form className={styles.rowData_container} onDoubleClick={startEditing}>
+    <form ref={refForm} className={styles.rowData_container} onDoubleClick={startEditing}>
       <div className={styles.rowData_level_container} onDoubleClick={(e) => e.stopPropagation()}>
-        <button
-          aria-label='third-level'
-          onClick={(e) => e.preventDefault()}
-          className={styles.rowData_third_level_icon_container}
+        <CreateLevel
+          parentId={parentId}
+          id={id}
+          type='row'
+          parent={true}
+          parentHasParent={parentHasParent}
+          isParentLast={isParentLast}
         />
-        <span
-          className={`${
-            parentHasParent ? styles.rowData_third_level_line : styles.rowData_third_level_main_line
-          }`}
-        />
-        <span
-          className={`${
-            parentHasParent
-              ? styles.rowData_third_level_line_handle
-              : styles.rowData_third_level_line_main_handle
-          }`}
-        />
-        {parentHasParent && !isParentLast && (
-          <span className={styles.rowData_second_level_sub_line} />
-        )}
       </div>
       {isEditing ? (
         <>
           <div>
-            <Input type='text' value={values.title} onChange={(e) => onChangeHandler(e, 'title')} />
+            <Input
+              inputRef={ref}
+              type='text'
+              value={values.title}
+              onChange={(e) => onChangeHandler(e, 'title')}
+              onKeyDown={(e) => stopEditing(e)}
+            />
           </div>
           <div>
-            <Input type='text' value={values.unit} onChange={(e) => onChangeHandler(e, 'unit')} />
+            <Input
+              type='text'
+              value={values.unit}
+              onChange={(e) => onChangeHandler(e, 'unit')}
+              onKeyDown={(e) => stopEditing(e)}
+            />
           </div>
           <div>
             <Input
               type='text'
               value={values.quantity}
               onChange={(e) => onChangeHandler(e, 'quantity')}
+              onKeyDown={(e) => stopEditing(e)}
             />
           </div>
           <div>
@@ -90,6 +105,7 @@ export const RowTypeRowData: React.FC<RowTypeRowDataProps> = ({
               type='text'
               value={values.unitPrice}
               onChange={(e) => onChangeHandler(e, 'unitPrice')}
+              onKeyDown={(e) => stopEditing(e)}
             />
           </div>
         </>

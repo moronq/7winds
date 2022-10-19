@@ -47,3 +47,8 @@ export function editRow(row: RowData, storage: RowData[]) {
     changed: recalculation(row.parent, storage)
   }
 }
+
+export function saveChanges(changes: RowData[], storage: RowData[]) {
+  const result = storage.filter((x) => !changes.some((y) => x.id === y.id))
+  return result.concat(changes)
+}
